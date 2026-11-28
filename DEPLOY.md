@@ -15,24 +15,69 @@ nulla**, si pubblica la cartella così com'è.
 
 Tutte e tre le opzioni danno **HTTPS automatico e gratuito**.
 
-### Opzione A — GitHub Pages (se hai già il repository)
+### Opzione A — GitHub Pages (repository già pronto in questa cartella)
 
-1. Accedi a GitHub e apri il repository del progetto (quello da cui è stata
-   scaricata la cartella `miei-libri-main`).
-2. Carica nella radice del repository tutti i file di questa cartella
-   (`index.html`, `privacy.html`, `manifest.webmanifest`, `sw.js`, `icons/`,
-   `netlify.toml`, `_headers`, ecc.). Se il repository esiste già, sostituisci i
-   file esistenti.
-3. Vai su **Settings → Pages**.
-4. In *Build and deployment* scegli **Deploy from a branch**, poi branch `main`
-   e cartella `/ (root)`. Salva.
-5. Attendi 1–2 minuti: il sito sarà su
-   `https://<tuo-utente>.github.io/<nome-repository>/`.
-6. Se il repository si chiama `<tuo-utente>.github.io`, l'indirizzo sarà invece
+Questa cartella è già un repository Git con il primo commit completo, quindi
+non serve caricare i file uno per uno dal sito di GitHub: bastano tre passaggi.
+
+**1. Crea il repository vuoto su GitHub**
+
+1. Accedi a <https://github.com> → **+** in alto a destra → **New repository**.
+2. Nome consigliato: `miei-libri`.
+3. Visibilità: **Public** (con il piano gratuito GitHub Pages pubblica solo
+   repository pubblici).
+4. **Non** aggiungere README, licenza o `.gitignore`: devono restare vuoti,
+   altrimenti il primo `push` viene rifiutato.
+5. Premi **Create repository** e copia l'indirizzo che compare, del tipo
+   `https://github.com/<tuo-utente>/miei-libri.git`.
+
+**2. Collega e carica (Git Bash, nella cartella del sito)**
+
+```bash
+cd "C:/Users/PC01/Desktop/miei-libri-main"
+git remote add origin https://github.com/<tuo-utente>/miei-libri.git
+git push -u origin main
+```
+
+Se il `push` chiede le credenziali, usa il tuo nome utente GitHub e come password
+un **Personal Access Token** (GitHub → *Settings → Developer settings → Personal
+access tokens → Tokens (classic) → Generate new token*, spunta lo scope `repo`).
+La password normale dell'account non è più accettata da GitHub.
+
+Al primo `push` Git potrebbe chiedere chi sei. Per firmare i commit con il tuo
+nome (facoltativo, si può fare anche dopo):
+
+```bash
+git config user.name "Nome Cognome"
+git config user.email "la-tua-email@example.com"
+```
+
+**3. Attiva GitHub Pages**
+
+1. Nel repository: **Settings → Pages**.
+2. In *Build and deployment* scegli **Deploy from a branch**.
+3. Branch `main`, cartella `/ (root)`, poi **Save**.
+4. Attendi 1–2 minuti: il sito sarà su
+   `https://<tuo-utente>.github.io/miei-libri/`.
+5. Se il repository si chiama `<tuo-utente>.github.io`, l'indirizzo sarà invece
    `https://<tuo-utente>.github.io/`.
 
-Aggiornamenti successivi: carica i file modificati e attendi la nuova
-pubblicazione automatica.
+Il file `.nojekyll` presente nella cartella dice a GitHub di pubblicare i file
+così come sono, senza rielaborarli: è già committato e non va toccato.
+
+Tutti i percorsi interni sono relativi (`icons/…`, `splash/…`, `./index.html`,
+`scope: "./"`), quindi il sito funziona anche nella sottocartella del repository.
+
+Aggiornamenti successivi: dopo aver modificato i file, esegui
+
+```bash
+git add -A
+git commit -m "Descrizione della modifica"
+git push
+```
+
+GitHub ripubblica da solo in un minuto o due. Ricordati di alzare `CACHE_NAME`
+in `sw.js` quando cambi contenuti, come spiegato al punto 5.
 
 ### Opzione B — Netlify Drop (la più veloce, trascini la cartella)
 
